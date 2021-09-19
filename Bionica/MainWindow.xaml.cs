@@ -20,9 +20,21 @@ namespace Bionica
     /// </summary>
     public partial class MainWindow : Window
     {
+        ViewModel DC = new ViewModel();
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = DC;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            DC.Next();
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            DC.Start();
         }
     }
 }

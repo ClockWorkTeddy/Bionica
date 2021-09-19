@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "YWZbCjLtlhIvOeUyIsnQMAQwVgQJOBOIXYSPQf4jhVevKScrpUocHP6fKlnXNtmnIhcBMV+Lbced0LFGUnJDcw==",
+  "dgSpecHash": "vWX6J4xRz5bvm0rHrL3x5XObffj+WtPkC5kjkmSSCaE4lkCzII47IV/9wvw8bvYIuj2w2fGK++ak/r2E12JAbQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\vanka\\source\\repos\\Bionica\\Bionica\\Bionica.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\vanka\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
+    "C:\\Users\\vanka\\.nuget\\packages\\microsoft.win32.systemevents\\5.0.0\\microsoft.win32.systemevents.5.0.0.nupkg.sha512",
+    "C:\\Users\\vanka\\.nuget\\packages\\system.drawing.common\\5.0.2\\system.drawing.common.5.0.2.nupkg.sha512"
+  ],
   "logs": []
 }
