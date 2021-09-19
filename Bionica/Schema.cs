@@ -29,7 +29,7 @@ namespace Bionica
         {
             Clear();
 
-            int quantity = 20;
+            int quantity = 200;
 
             for (int i = 0; i < quantity; i++)
                 AddCreature();
@@ -68,9 +68,26 @@ namespace Bionica
         public void Move()
         {
             foreach (Creature creature in Creatures)
-                creature.Move();
+            {
+                int block_x = GetBlock(creature.Location.X, creature.Size);
+                int block_y = GetBlock(creature.Location.Y, creature.Size);
+
+                creature.Move(block_x, block_y);
+            }
 
             Place();
+        }
+
+        public int GetBlock(int Location, int size)
+        {
+            int block = 0;
+
+            if (Location >= Size - size)
+                block = -1;
+            else if (Location <= size)
+                block = 1;
+
+            return block;
         }
 
     }

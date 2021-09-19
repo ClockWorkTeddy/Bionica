@@ -5,11 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bionica"
         mc:Ignorable="d"
-        Title="MainWindow" Height="470" Width="500">
+        Title="MainWindow" Height="461" Width="528">
     <Grid>
-        <Button Content="Start" HorizontalAlignment="Left" Margin="428,37,0,0" VerticalAlignment="Top" Click="Button_Click_1"/>
-        <Button Content="Next" HorizontalAlignment="Left" Margin="428,62,0,0" VerticalAlignment="Top" Click="Button_Click"/>
-        <Image HorizontalAlignment="Left" Height="{Binding Path=Size}" Margin="25,25,0,0" VerticalAlignment="Top" Width="{Binding Path=Size}" Source="{Binding Path=Image}"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="422"/>
+            <ColumnDefinition Width="80"/>
+        </Grid.ColumnDefinitions>
+        <Border BorderThickness="1" BorderBrush="Black" Margin="10,10,10,10">
+            <Image x:Name="Pic" HorizontalAlignment="Left" Height="400" Margin="0,0,0,0" VerticalAlignment="Top" Width="400" Source="{Binding Path=Image}"/>
+        </Border>
+        <Button Content="Start" Margin="10,10,10,0" VerticalAlignment="Top" Click="Button_Click_1" Grid.Column="1" HorizontalAlignment="Stretch"/>
+        <Button Content="Next" Margin="10,35,10,0" VerticalAlignment="Top" Click="Button_Click" Grid.Column="1" HorizontalAlignment="Stretch"/>
+
+
+
 
     </Grid>
 </Window>
