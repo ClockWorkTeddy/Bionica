@@ -37,11 +37,20 @@ namespace Bionica
 
             for (int i = 0; i < 400; i++)
                 for (int j = 0; j < 400; j++)
-                    Img.SetPixel(i, j, Schema.Sch[i,j] == 0 ? Color.White : Color.Black);
+                    Img.SetPixel(i, j, GetColor(Schema.Sch[i,j]));
 
             Update(Img);
         }
 
+        public Color GetColor(int code)
+        {
+            Color color = Color.White;
+
+            if (code == 1)
+                color = Color.Green;
+
+            return color;
+        }
         public void Start()
         {
             Schema.Start();
