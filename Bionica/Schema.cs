@@ -49,11 +49,10 @@ namespace Bionica
 
         private Point GetLocation()
         {
-            int i = 0;
-            int j = 0;
-
             Random rnd = new Random();
 
+            int i;
+            int j;
             do
             {
                 i = rnd.Next(0, Size);
