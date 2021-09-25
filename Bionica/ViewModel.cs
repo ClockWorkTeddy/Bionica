@@ -11,6 +11,7 @@ namespace Bionica
     class ViewModel : INotifyPropertyChanged
     {
         private BitmapSource image = new BitmapImage();
+        private int epoche = 0;
         Schema Schema = null;
         public int Size { get; set; }
 
@@ -21,6 +22,15 @@ namespace Bionica
             {
                 image = value;
                 OnPropertyChanged("Image");
+            }
+        }
+        public int Epoche
+        {
+            get { return epoche; }
+            set
+            {
+                epoche = value;
+                OnPropertyChanged("Epoche");
             }
         }
 
@@ -40,6 +50,7 @@ namespace Bionica
                     Img.SetPixel(i, j, GetColor(Schema.Sch[i,j]));
 
             Update(Img);
+            Epoche = Schema.Epoche;
         }
 
         public Color GetColor(int code)

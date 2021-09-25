@@ -1,1 +1,2 @@
-﻿1. Add epoche.
+﻿+	1. Add epoche.
+!	2. Add fertility.

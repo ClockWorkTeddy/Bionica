@@ -8,6 +8,8 @@ namespace Bionica
     class Schema
     {
         public int[,] Sch = null;
+
+        public int Epoche { get; set; }
         public Dictionary<string, List<Creature>> Creatures {get; set;}
         public List<Creature> Plants { get; set; }
         public int Size { get; set; }
@@ -28,6 +30,8 @@ namespace Bionica
 
             foreach (List<Creature> list in Creatures.Values)
                 list.Clear();
+
+            Epoche = -1;
         }
         public void Start()
         {
@@ -37,6 +41,8 @@ namespace Bionica
 
             for (int i = 0; i < plants_qnt; i++)
                 AddPlant();
+
+            Place();
         }
 
 
@@ -44,7 +50,6 @@ namespace Bionica
         {
             Plant plant = new Plant(GetLocation());
             Plants.Add(plant);
-            Place();
         }
 
         private Point GetLocation()
@@ -69,22 +74,36 @@ namespace Bionica
                 foreach (Creature creature in list)
                 {
                     Sch[creature.PreviousLocation.X, creature.PreviousLocation.Y] = 0;
-                    Sch[creature.Location.X, creature.Location.Y] = creature.Code;
+
+                    if (creature.IsAlive)
+                        Sch[creature.Location.X, creature.Location.Y] = creature.Code;
                 }
+
+            Epoche++;
         }
 
         public void Move()
         {
             foreach (List<Creature> list in Creatures.Values)
                 foreach (Creature creature in list)
-            {
-                int block_x = GetBlock(creature.Location.X, creature.Size);
-                int block_y = GetBlock(creature.Location.Y, creature.Size);
+                {
+                    int block_x = GetBlock(creature.Location.X, creature.Size);
+                    int block_y = GetBlock(creature.Location.Y, creature.Size);
 
-                creature.Move(block_x, block_y);
-            }
+                    creature.Move(block_x, block_y);
+                }
 
             Place();
+            Death();
+        }
+
+        private void Death()
+        {
+            string[] keys = new string[Creatures.Keys.Count];
+            Creatures.Keys.CopyTo(keys, 0);
+
+            for (int i = 0; i < Creatures.Values.Count; i++)
+                Creatures[keys[i]].RemoveAll(x => !x.IsAlive);
         }
 
         public int GetBlock(int Location, int size)
