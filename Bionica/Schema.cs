@@ -7,8 +7,8 @@ namespace Bionica
 {
     class Schema
     {
+        private int Square;
         public int[,] Sch = null;
-
         public int Epoche { get; set; }
         public Dictionary<string, List<Creature>> Creatures {get; set;}
         public List<Creature> Plants { get; set; }
@@ -19,8 +19,8 @@ namespace Bionica
             Creatures = new Dictionary<string, List<Creature>>();
             Plants = new List<Creature>();
             Creatures.Add("Plants", Plants);
-            
             Size = size;
+            Square = Size * Size;
         }
         private void Clear()
         {
@@ -36,20 +36,34 @@ namespace Bionica
         public void Start()
         {
             Clear();
-
-            int plants_qnt = 200;
-
-            for (int i = 0; i < plants_qnt; i++)
-                AddPlant();
-
+            AddPlants();
             Place();
         }
 
+        private void AddPlants()
+        {
+            double fertility = GetFertility();
+            int plants_qnt = (int)((Square - Plants.Count) * fertility + 0.5);
+
+            for (int i = 0; i < plants_qnt; i++)
+                AddPlant();
+        }
+
+        private double GetFertility()
+        {
+            Random rnd = new Random();
+            int min_fert = 1;
+            int max_fert = 6;
+            double fertility = rnd.Next(min_fert, max_fert) / 10000.0;
+
+            return fertility;
+        }
 
         private void AddPlant()
         {
             Plant plant = new Plant(GetLocation());
             Plants.Add(plant);
+            Sch[plant.Location.X, plant.Location.Y] = plant.Code;
         }
 
         private Point GetLocation()
@@ -93,6 +107,7 @@ namespace Bionica
                     creature.Move(block_x, block_y);
                 }
 
+            AddPlants();
             Place();
             Death();
         }
@@ -106,17 +121,39 @@ namespace Bionica
                 Creatures[keys[i]].RemoveAll(x => !x.IsAlive);
         }
 
-        public int GetBlock(int Location, int size)
+        public int GetBlock(int location, int size)
         {
             int block = 0;
 
-            if (Location >= Size - size)
+            if (location == Size - size)
                 block = -1;
-            else if (Location <= size)
+            else if (location == size)
                 block = 1;
 
             return block;
         }
 
+        public override string ToString()
+        {
+            if (Sch == null)
+                return base.ToString();
+            else
+                return GetSchString();
+
+        }
+
+        private string GetSchString()
+        {
+            string result = "";
+
+            for (int i = 0; i < Size; i++)
+            {
+                for (int j = 0; j < Size; j++)
+                    result += Sch[j, i];
+                result += "\n";
+            }
+
+            return result;
+        }
     }
 }

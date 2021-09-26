@@ -23,4 +23,3 @@ C:\Users\vanka\source\repos\Bionica\Bionica\obj\Debug\netcoreapp3.1\Bionica.cspr
 C:\Users\vanka\source\repos\Bionica\Bionica\obj\Debug\netcoreapp3.1\Bionica.dll
 C:\Users\vanka\source\repos\Bionica\Bionica\obj\Debug\netcoreapp3.1\Bionica.pdb
 C:\Users\vanka\source\repos\Bionica\Bionica\obj\Debug\netcoreapp3.1\Bionica.genruntimeconfig.cache
-C:\Users\vanka\source\repos\Bionica\Bionica\obj\Debug\netcoreapp3.1\Bionica.csproj.AssemblyReference.cache

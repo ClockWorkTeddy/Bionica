@@ -20,7 +20,7 @@ namespace Bionica
         public Creature (Point location, Point max_age_range)
         {
             Location = location;
-            PreviousLocation = new Point(0, 0);
+            PreviousLocation = location;
             Age = 0;
             max_age = GetMaxAge(max_age_range);
         }
@@ -45,7 +45,7 @@ namespace Bionica
             Random rnd = new Random();
             int random = rnd.Next(100);
 
-            int result = (random < 50 ? -Speed : Speed) + block;
+            int result = (random < 50 ? -Speed : Speed) + block * Speed;
 
             return result;
         }

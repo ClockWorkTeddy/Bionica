@@ -13,7 +13,7 @@ namespace Bionica
         private BitmapSource image = new BitmapImage();
         private int epoche = 0;
         Schema Schema = null;
-        public int Size { get; set; }
+        public int Size { get; set; } = 400;
 
         public BitmapSource Image
         {
@@ -36,17 +36,16 @@ namespace Bionica
 
         public ViewModel()
         {
-            Size = 400;
             Schema = new Schema(Size);
             ReDraw();
         }
 
         public void ReDraw()
         {
-            Bitmap Img = new Bitmap(400, 400);
+            Bitmap Img = new Bitmap(Size, Size);
 
-            for (int i = 0; i < 400; i++)
-                for (int j = 0; j < 400; j++)
+            for (int i = 0; i < Size; i++)
+                for (int j = 0; j < Size; j++)
                     Img.SetPixel(i, j, GetColor(Schema.Sch[i,j]));
 
             Update(Img);

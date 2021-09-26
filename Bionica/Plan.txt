@@ -1,2 +1,3 @@
 ﻿+	1. Add epoche.
-!	2. Add fertility.
++	2. Add fertility.
+!	3. Add Space-button.

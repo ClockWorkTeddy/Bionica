@@ -12,7 +12,7 @@
             <ColumnDefinition Width="80"/>
         </Grid.ColumnDefinitions>
         <Border BorderThickness="1" BorderBrush="Black" Margin="10,10,10,10">
-            <Image x:Name="Pic" HorizontalAlignment="Left" Height="400" Margin="0,0,0,0" VerticalAlignment="Top" Width="400" Source="{Binding Path=Image}"/>
+            <Image x:Name="Pic" HorizontalAlignment="Left" Height="{Binding Path=Size}" Margin="0,0,0,0" VerticalAlignment="Top" Width="{Binding Path=Size}" Source="{Binding Path=Image}"/>
         </Border>
         <Button Content="Start" Margin="10,10,10,0" VerticalAlignment="Top" Click="Button_Click_1" Grid.Column="1" HorizontalAlignment="Stretch"/>
         <Button Content="Next" Margin="10,35,10,0" VerticalAlignment="Top" Click="Button_Click" Grid.Column="1" HorizontalAlignment="Stretch"/>
