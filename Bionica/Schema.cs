@@ -11,14 +11,15 @@ namespace Bionica
         public int[,] Sch = null;
         public int Epoche { get; set; }
         public Dictionary<string, List<Creature>> Creatures {get; set;}
-        public List<Creature> Plants { get; set; }
+        public List<Creature> Plants { get; set; } = new List<Creature>();
+        public List<Creature> Herbivores { get; set; } = new List<Creature>();
         public int Size { get; set; }
         public Schema(int size)
         {
             Sch = new int[size, size];
             Creatures = new Dictionary<string, List<Creature>>();
-            Plants = new List<Creature>();
             Creatures.Add("Plants", Plants);
+            Creatures.Add("Herbivores", Herbivores);
             Size = size;
             Square = Size * Size;
         }
@@ -37,6 +38,7 @@ namespace Bionica
         {
             Clear();
             AddPlants();
+            AddHerbivore();
             Place();
         }
 
@@ -54,19 +56,32 @@ namespace Bionica
             Random rnd = new Random();
             int min_fert = 1;
             int max_fert = 6;
-            double fertility = rnd.Next(min_fert, max_fert) / 10000.0;
+            double fertility = rnd.Next(min_fert, max_fert) / (Size * 10.0);
 
             return fertility;
+        }
+        private void AddHerbivore()
+        {
+            Herbivore herb = new Herbivore(GetLocation(Herbivore.SizeDef));
+            Herbivores.Add(herb);
+            SetCode(herb.Location, herb.Size, herb.Code);
         }
 
         private void AddPlant()
         {
-            Plant plant = new Plant(GetLocation());
+            Plant plant = new Plant(GetLocation(Plant.SizeDef));
             Plants.Add(plant);
-            Sch[plant.Location.X, plant.Location.Y] = plant.Code;
+            SetCode(plant.Location, plant.Size, plant.Code);
         }
 
-        private Point GetLocation()
+        private void SetCode(Point location, int size, int code)
+        {
+            for (int i = location.X; i < location.X + size; i++)
+                for (int j = location.Y; j < location.Y + size; j++)
+                    Sch[j, i] = code;
+        }
+
+        private Point GetLocation(int creature_size)
         {
             Random rnd = new Random();
 
@@ -74,12 +89,23 @@ namespace Bionica
             int j;
             do
             {
-                i = rnd.Next(0, Size);
-                j = rnd.Next(0, Size);
+                i = rnd.Next(0, Size - creature_size);
+                j = rnd.Next(0, Size - creature_size);
             }
-            while (Sch[i, j] != 0);
+            while (FreeSpace(i, j, creature_size));
 
             return new Point(i, j);
+        }
+
+        private bool FreeSpace(int i, int j, int size)
+        {
+            int summ = 0;
+
+            for (int p = i; p < i + size; p++)
+                for (int q = j; q < j + size; q++)
+                    summ += Sch[j, i];
+
+            return summ != 0;
         }
 
         public void Place()
@@ -87,10 +113,10 @@ namespace Bionica
             foreach (List<Creature> list in Creatures.Values)
                 foreach (Creature creature in list)
                 {
-                    Sch[creature.PreviousLocation.X, creature.PreviousLocation.Y] = 0;
+                    SetCode(creature.PreviousLocation, creature.Size, 0);
 
                     if (creature.IsAlive)
-                        Sch[creature.Location.X, creature.Location.Y] = creature.Code;
+                        SetCode(creature.Location, creature.Size, creature.Code);
                 }
 
             Epoche++;
@@ -144,16 +170,16 @@ namespace Bionica
 
         private string GetSchString()
         {
-            string result = "";
+            StringBuilder result = new StringBuilder();
 
             for (int i = 0; i < Size; i++)
             {
                 for (int j = 0; j < Size; j++)
-                    result += Sch[j, i];
-                result += "\n";
+                    result.Append(Sch[j, i] + ",");
+                result.Append("\n");
             }
 
-            return result;
+            return result.ToString();
         }
     }
 }

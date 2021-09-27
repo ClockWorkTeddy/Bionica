@@ -58,6 +58,8 @@ namespace Bionica
 
             if (code == 1)
                 color = Color.Green;
+            else if (code == 2)
+                color = Color.Brown;
 
             return color;
         }

@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bionica"
         mc:Ignorable="d"
-        Title="MainWindow" Height="461" Width="528">
+        Title="MainWindow" Height="461" Width="528"
+        KeyDown="Button_KeyDown">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="422"/>
