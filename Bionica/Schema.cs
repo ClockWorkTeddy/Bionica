@@ -65,6 +65,7 @@ namespace Bionica
             Herbivore herb = new Herbivore(GetLocation(Herbivore.SizeDef));
             Herbivores.Add(herb);
             SetCode(herb.Location, herb.Size, herb.Code);
+            herb.RemoveCreature += RemoveCreature;
         }
 
         private void AddPlant()
@@ -72,6 +73,17 @@ namespace Bionica
             Plant plant = new Plant(GetLocation(Plant.SizeDef));
             Plants.Add(plant);
             SetCode(plant.Location, plant.Size, plant.Code);
+            plant.RemoveCreature += RemoveCreature;
+        }
+
+        private void RemoveCreature(Creature creature)
+        {
+            SetCode(creature.Location, creature.Size, 0);
+
+            if (creature is Plant)
+                Creatures["Plants"].Remove(creature);
+            else if (creature is Herbivore)
+                Creatures["Herbivores"].Remove(creature);
         }
 
         private void SetCode(Point location, int size, int code)
@@ -92,7 +104,7 @@ namespace Bionica
                 i = rnd.Next(0, Size - creature_size);
                 j = rnd.Next(0, Size - creature_size);
             }
-            while (FreeSpace(i, j, creature_size));
+            while (!CheckPlace(i, j, creature_size, 0));
 
             return new Point(i, j);
         }
@@ -103,7 +115,7 @@ namespace Bionica
 
             for (int p = i; p < i + size; p++)
                 for (int q = j; q < j + size; q++)
-                    summ += Sch[j, i];
+                    summ += Sch[q, p];
 
             return summ != 0;
         }
@@ -114,9 +126,7 @@ namespace Bionica
                 foreach (Creature creature in list)
                 {
                     SetCode(creature.PreviousLocation, creature.Size, 0);
-
-                    if (creature.IsAlive)
-                        SetCode(creature.Location, creature.Size, creature.Code);
+                    SetCode(creature.Location, creature.Size, creature.Code);
                 }
 
             Epoche++;
@@ -125,26 +135,44 @@ namespace Bionica
         public void Move()
         {
             foreach (List<Creature> list in Creatures.Values)
-                foreach (Creature creature in list)
+                for (int i = 0; i < list.Count; i++)
                 {
-                    int block_x = GetBlock(creature.Location.X, creature.Size);
-                    int block_y = GetBlock(creature.Location.Y, creature.Size);
+                    int block_x = GetBlock(list[i].Location.X, list[i].Size);
+                    int block_y = GetBlock(list[i].Location.Y, list[i].Size);
 
-                    creature.Move(block_x, block_y);
+                    list[i].Move(block_x, block_y);
                 }
 
             AddPlants();
             Place();
-            Death();
         }
 
-        private void Death()
+        private List<Point> GetFreeSpace(Creature creature)
         {
-            string[] keys = new string[Creatures.Keys.Count];
-            Creatures.Keys.CopyTo(keys, 0);
+            List<Point> FreeSpace = new List<Point>();
 
-            for (int i = 0; i < Creatures.Values.Count; i++)
-                Creatures[keys[i]].RemoveAll(x => !x.IsAlive);
+            int x = creature.Location.Y;
+            int y = creature.Location.X;
+            int size = creature.Size;
+
+            for (int i = x - size; i < x + size; i += size)
+                for (int j = y - size; y < j + size; i += size)
+                    if (CheckPlace(i, j, size, 1))
+                        FreeSpace.Add(new Point(i - x, j - y));
+
+            return FreeSpace;
+        }
+
+        private bool CheckPlace(int i, int j, int size, int min_code)
+        {
+            int result = 0;
+
+            for (int p = i; p < i + size; p++)
+                for (int q = j; q < j + size; q++)
+                    if (Sch[q, p] > min_code)
+                        result++;
+
+            return result == 0;
         }
 
         public int GetBlock(int location, int size)
@@ -176,6 +204,7 @@ namespace Bionica
             {
                 for (int j = 0; j < Size; j++)
                     result.Append(Sch[j, i] + ",");
+
                 result.Append("\n");
             }
 

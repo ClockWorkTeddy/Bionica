@@ -1,5 +1,6 @@
 ﻿+	1. Add epoche.
 +	2. Add fertility.
 +	3. Add Space-button.
-! 4. Move Dead() to events.
-!	5. Add eating.
++	4. Move Dead() to events.
+!	5. Add Space Checking Properly.
+!	6. Add eating.

@@ -15,8 +15,8 @@ namespace Bionica
         public int Speed { get; set; }
         public int Code { get; set; }
         public int Age { get; set; }
-        public bool IsAlive { get; set; } = true;
-
+        public delegate void Death(Creature creature);
+        public event Death RemoveCreature;
         public Creature (Point location, Point max_age_range)
         {
             Location = location;
@@ -35,9 +35,9 @@ namespace Bionica
 
         public void Move(int block_x, int block_y)
         {
+            Ageing();
             PreviousLocation = Location;
             Location = new Point(Location.X + GetLocation(block_x), Location.Y + GetLocation(block_y));
-            Ageing();
         }
 
         private int GetLocation(int block)
@@ -54,8 +54,8 @@ namespace Bionica
         {
             Age++;
 
-            if (Age >= max_age)
-                IsAlive = false;
+            if (Age > max_age)
+                RemoveCreature?.Invoke(this);
         }
 
         public override string ToString()
