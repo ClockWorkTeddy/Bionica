@@ -7,7 +7,7 @@ namespace Bionica
 {
     class Herbivore : Creature
     {
-        private static Point max_age_range = new Point(5, 8);
+        private static Point max_age_range = new Point(50, 80);
         public static int SizeDef { get; } = 2;
         public Herbivore(Point location) : base (location, max_age_range)
         {

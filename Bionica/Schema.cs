@@ -109,17 +109,6 @@ namespace Bionica
             return new Point(i, j);
         }
 
-        private bool FreeSpace(int i, int j, int size)
-        {
-            int summ = 0;
-
-            for (int p = i; p < i + size; p++)
-                for (int q = j; q < j + size; q++)
-                    summ += Sch[q, p];
-
-            return summ != 0;
-        }
-
         public void Place()
         {
             foreach (List<Creature> list in Creatures.Values)
@@ -136,12 +125,7 @@ namespace Bionica
         {
             foreach (List<Creature> list in Creatures.Values)
                 for (int i = 0; i < list.Count; i++)
-                {
-                    int block_x = GetBlock(list[i].Location.X, list[i].Size);
-                    int block_y = GetBlock(list[i].Location.Y, list[i].Size);
-
-                    list[i].Move(block_x, block_y);
-                }
+                    list[i].Move(GetFreeSpace(list[i]));
 
             AddPlants();
             Place();
@@ -155,12 +139,27 @@ namespace Bionica
             int y = creature.Location.X;
             int size = creature.Size;
 
-            for (int i = x - size; i < x + size; i += size)
-                for (int j = y - size; y < j + size; i += size)
-                    if (CheckPlace(i, j, size, 1))
+            int min_i = MinValue(x - size);
+            int max_i = MaxValue(x, size);
+            int min_j = MinValue(y - size);
+            int max_j = MaxValue(y, size);
+
+            for (int i = min_i; i <= max_i; i += size)
+                for (int j = min_j; j <= max_j; j += size)
+                    if ( CheckPlace(i, j, size, 1) && !((x == i) && (y == j)) )
                         FreeSpace.Add(new Point(i - x, j - y));
 
             return FreeSpace;
+        }
+
+        private int MinValue(int value)
+        {
+            return value < 0 ? 0 : value;
+        }
+
+        private int MaxValue(int value, int size)
+        {
+            return value + size >= Size ? value : value + size;
         }
 
         private bool CheckPlace(int i, int j, int size, int min_code)
@@ -169,7 +168,7 @@ namespace Bionica
 
             for (int p = i; p < i + size; p++)
                 for (int q = j; q < j + size; q++)
-                    if (Sch[q, p] > min_code)
+                    if (Sch[p, q] > min_code)
                         result++;
 
             return result == 0;

@@ -33,21 +33,20 @@ namespace Bionica
             return max_age;
         }
 
-        public void Move(int block_x, int block_y)
+        public void Move(List<Point> free_points)
         {
             Ageing();
             PreviousLocation = Location;
-            Location = new Point(Location.X + GetLocation(block_x), Location.Y + GetLocation(block_y));
+            Point step = GetStep(free_points);
+            Location = new Point(Location.X + step.X * Speed, Location.Y + step.Y * Speed);
         }
 
-        private int GetLocation(int block)
+        private Point GetStep(List<Point> free_points)
         {
             Random rnd = new Random();
-            int random = rnd.Next(100);
-
-            int result = (random < 50 ? -Speed : Speed) + block * Speed;
-
-            return result;
+            int number = rnd.Next(free_points.Count);
+            
+            return free_points[number];
         }
 
         private void Ageing()
