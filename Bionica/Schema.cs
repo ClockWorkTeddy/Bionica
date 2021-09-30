@@ -103,10 +103,26 @@ namespace Bionica
             {
                 i = rnd.Next(0, Size - creature_size);
                 j = rnd.Next(0, Size - creature_size);
+
+                if (creature_size > 1)
+                {
+                    i = ToSize(i, creature_size);
+                    j = ToSize(j, creature_size);
+                }
             }
             while (!CheckPlace(i, j, creature_size, 0));
 
             return new Point(i, j);
+        }
+
+        private int ToSize(int value, int size)
+        {
+            int remainder = value % size;
+
+            if (remainder != 0)
+                value += remainder;
+
+            return value;
         }
 
         public void Place()
@@ -135,8 +151,8 @@ namespace Bionica
         {
             List<Point> FreeSpace = new List<Point>();
 
-            int x = creature.Location.Y;
-            int y = creature.Location.X;
+            int x = creature.Location.X;
+            int y = creature.Location.Y;
             int size = creature.Size;
 
             int min_i = MinValue(x - size);
@@ -166,8 +182,8 @@ namespace Bionica
         {
             int result = 0;
 
-            for (int p = i; p < i + size; p++)
-                for (int q = j; q < j + size; q++)
+            for (int p = i; p < i + size; p += size)
+                for (int q = j; q < j + size; q += size)
                     if (Sch[p, q] > min_code)
                         result++;
 

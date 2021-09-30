@@ -46,7 +46,7 @@ namespace Bionica
 
             for (int i = 0; i < Size; i++)
                 for (int j = 0; j < Size; j++)
-                    Img.SetPixel(i, j, GetColor(Schema.Sch[i,j]));
+                    Img.SetPixel(j, i, GetColor(Schema.Sch[i,j]));
 
             Update(Img);
             Epoche = Schema.Epoche;
