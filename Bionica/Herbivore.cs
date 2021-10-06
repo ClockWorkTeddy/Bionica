@@ -5,15 +5,17 @@ using System.Drawing;
 
 namespace Bionica
 {
-    class Herbivore : Creature
+    class Herbivore : MobileCreature
     {
-        private static Point max_age_range = new Point(500, 800);
+        private static Point max_age_range = new Point(1000, 1500);
+        private static int saturation = 50;
         public static int SizeDef { get; } = 2;
-        public Herbivore(Point location) : base (location, max_age_range)
+        public Herbivore(Point location) : base (location, max_age_range, saturation)
         {
             Size = 2;
             Code = 2;
             Speed = 1;
         }
+
     }
 }

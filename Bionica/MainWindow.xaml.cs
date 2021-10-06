@@ -38,8 +38,10 @@ namespace Bionica
         }
 
         private void Button_KeyDown(object sender, KeyEventArgs e)
-        {       
-            if (e.Key == Key.Space)
+        {
+            if (e.Key == Key.G)
+                DC.Start();
+            else if (e.Key == Key.N)
                 DC.Next();
         }
     }

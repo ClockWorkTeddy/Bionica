@@ -8,21 +8,19 @@ namespace Bionica
     abstract class Creature
     {
         private int max_age = 0;
-
         public Point Location { get; set; }
-        public Point PreviousLocation { get; set; }
         public int Size { get; set; }
-        public int Speed { get; set; }
         public int Code { get; set; }
         public int Age { get; set; }
-        public delegate void Death(Creature creature);
-        public event Death RemoveCreature;
+        public bool Alive { get; set; }
+        public delegate void CreatureHandler(Creature creature);
+        public event CreatureHandler RemoveCreature;
         public Creature (Point location, Point max_age_range)
         {
             Location = location;
-            PreviousLocation = location;
             Age = 0;
             max_age = GetMaxAge(max_age_range);
+            Alive = true;
         }
 
         private int GetMaxAge(Point max_age_range)
@@ -33,23 +31,11 @@ namespace Bionica
             return max_age;
         }
 
-        public void Move(List<Point> free_points)
+        public virtual void Next()
         {
             Ageing();
-            PreviousLocation = Location;
-            Point step = GetStep(free_points);
-            Location = new Point(Location.X + step.X * Speed, Location.Y + step.Y * Speed);
         }
-
-        private Point GetStep(List<Point> free_points)
-        {
-            Random rnd = new Random();
-            int number = rnd.Next(free_points.Count);
-            
-            return free_points[number];
-        }
-
-        private void Ageing()
+        protected void Ageing()
         {
             Age++;
 
@@ -63,6 +49,16 @@ namespace Bionica
                 return base.ToString();
             else
                 return Location.ToString();
+        }
+
+        public virtual void Move()
+        {
+            ;
+        }
+
+        public virtual void Eats()
+        {
+            ;
         }
     }
 }

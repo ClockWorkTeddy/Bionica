@@ -39,6 +39,7 @@ namespace Bionica
             Clear();
             AddPlants();
             AddHerbivore();
+            AddHerbivore();
             Place();
         }
 
@@ -66,6 +67,9 @@ namespace Bionica
             Herbivores.Add(herb);
             SetCode(herb.Location, herb.Size, herb.Code);
             herb.RemoveCreature += RemoveCreature;
+            herb.GetFreePoints += GetFreeSpace;
+            herb.Starving += RemoveCreature;
+            herb.Eat += Eating;
         }
 
         private void AddPlant()
@@ -81,9 +85,14 @@ namespace Bionica
             SetCode(creature.Location, creature.Size, 0);
 
             if (creature is Plant)
+            {
                 Creatures["Plants"].Remove(creature);
+            }
             else if (creature is Herbivore)
+            {
                 Creatures["Herbivores"].Remove(creature);
+                SetCode((creature as Herbivore).PreviousLocation, creature.Size, 0);
+            }
         }
 
         private void SetCode(Point location, int size, int code)
@@ -130,7 +139,8 @@ namespace Bionica
             foreach (List<Creature> list in Creatures.Values)
                 foreach (Creature creature in list)
                 {
-                    SetCode(creature.PreviousLocation, creature.Size, 0);
+                    if (creature is MobileCreature)
+                        SetCode((creature as MobileCreature).PreviousLocation, creature.Size, 0);
                     SetCode(creature.Location, creature.Size, creature.Code);
                 }
 
@@ -141,10 +151,38 @@ namespace Bionica
         {
             foreach (List<Creature> list in Creatures.Values)
                 for (int i = 0; i < list.Count; i++)
-                    list[i].Move(GetFreeSpace(list[i]));
+                {
+                    int qnt = list.Count;
+
+                    list[i].Move();
+                    list[i].Eats();
+                    list[i].Next();
+
+                    if (list.Count < qnt)
+                        i--;
+                }
 
             AddPlants();
             Place();
+        }
+
+        private void Eating(MobileCreature mob_creature)
+        {
+            int x = mob_creature.Location.X;
+            int y = mob_creature.Location.Y;
+            int size = mob_creature.Size;
+
+            for(int i = x; i < x + size; i++)
+                for(int j = y; j < y + size; j++)
+                {
+                    List<Creature> eaten = Plants.FindAll(plant => plant.Location == new Point(i, j));
+
+                    if (eaten.Count != 0)
+                    {
+                        mob_creature.Saturation += eaten.Count * 10;
+                        Plants.RemoveAll(plant => plant.Location == new Point(i, j));
+                    }
+                }
         }
 
         private List<Point> GetFreeSpace(Creature creature)

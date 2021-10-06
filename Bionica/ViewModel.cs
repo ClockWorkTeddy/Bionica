@@ -12,6 +12,8 @@ namespace Bionica
     {
         private BitmapSource image = new BitmapImage();
         private int epoche = 0;
+        private int saturation = 0;
+
         Schema Schema = null;
         public int Size { get; set; } = 400;
 
@@ -34,6 +36,16 @@ namespace Bionica
             }
         }
 
+        public int Saturation
+        {
+            get { return saturation; }
+            set
+            {
+                saturation = value;
+                OnPropertyChanged("Saturation");
+            }
+        }
+
         public ViewModel()
         {
             Schema = new Schema(Size);
@@ -50,6 +62,7 @@ namespace Bionica
 
             Update(Img);
             Epoche = Schema.Epoche;
+            Saturation = Schema.Herbivores.Count > 0 ? (Schema.Herbivores[0] as MobileCreature).Saturation : 0;
         }
 
         public Color GetColor(int code)
