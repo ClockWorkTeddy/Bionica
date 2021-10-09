@@ -3,4 +3,6 @@
 +	3. Add Space-button.
 +	4. Move Dead() to events.
 +	5. Add Space Checking Properly.
-!	6. Add eating.
++	6. Add eating.
++	7. Breeding works!
+!	8. Speed up Move()
