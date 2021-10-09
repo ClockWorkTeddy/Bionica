@@ -50,15 +50,5 @@ namespace Bionica
             else
                 return Location.ToString();
         }
-
-        public virtual void Move()
-        {
-            ;
-        }
-
-        public virtual void Eats()
-        {
-            ;
-        }
     }
 }

@@ -16,6 +16,8 @@ namespace Bionica
         public event Mover GetFreePoints;
         public delegate void Hunger(Creature creature);
         public event Hunger Starving;
+        public delegate void Breed(Point location);
+        public event Breed Breeding;
 
         public MobileCreature(Point location, Point max_age_range, int saturation) : base (location, max_age_range)
         {
@@ -23,7 +25,7 @@ namespace Bionica
             Saturation = saturation;
         }
 
-        public override void Move()
+        public void Move()
         {
             PreviousLocation = Location;
             List<Point> free_points = GetFreePoints?.Invoke(this);
@@ -40,9 +42,23 @@ namespace Bionica
         }
 
         public override void Next()
-        {
-            Hungering();
-            Ageing();
+         {
+            int qnt = 1;
+            for (int i = 0; i < qnt; i++)
+                Move();
+            for (int i = 0; i < qnt; i++)
+                Eats();
+            for (int i = 0; i < qnt; i++)
+                Hungering();
+            for (int i = 0; i < qnt; i++)
+                Ageing();
+
+            if (this.Saturation > 100)
+            {
+                for (int i = 0; i < qnt; i++)
+                    Breeds();
+                this.Saturation -= 50;
+            }
         }
 
         private void Hungering()
@@ -53,10 +69,14 @@ namespace Bionica
                 Starving?.Invoke(this);
         }
 
-        public override void Eats()
+        public void Eats()
         {
             Eat?.Invoke(this);
         }
 
+        public void Breeds()
+        {
+            Breeding?.Invoke(this.PreviousLocation);
+        }
     }
 }

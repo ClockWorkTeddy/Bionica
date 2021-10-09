@@ -37,15 +37,17 @@ namespace Bionica
         public void Start()
         {
             Clear();
-            AddPlants();
-            AddHerbivore();
-            AddHerbivore();
+
+            AddPlants(0.2);
+
+            Point location = GetLocation(Herbivore.SizeDef);
+            AddHerbivore(location);
+
             Place();
         }
 
-        private void AddPlants()
+        private void AddPlants(double fertility)
         {
-            double fertility = GetFertility();
             int plants_qnt = (int)((Square - Plants.Count) * fertility + 0.5);
 
             for (int i = 0; i < plants_qnt; i++)
@@ -57,19 +59,20 @@ namespace Bionica
             Random rnd = new Random();
             int min_fert = 1;
             int max_fert = 6;
-            double fertility = rnd.Next(min_fert, max_fert) / (Size * 10.0);
+            double fertility = rnd.Next(min_fert, max_fert) / (Size * 25.0);
 
             return fertility;
         }
-        private void AddHerbivore()
+        private void AddHerbivore(Point location)
         {
-            Herbivore herb = new Herbivore(GetLocation(Herbivore.SizeDef));
+            Herbivore herb = new Herbivore(location);
             Herbivores.Add(herb);
             SetCode(herb.Location, herb.Size, herb.Code);
             herb.RemoveCreature += RemoveCreature;
             herb.GetFreePoints += GetFreeSpace;
             herb.Starving += RemoveCreature;
             herb.Eat += Eating;
+            herb.Breeding += Breed;
         }
 
         private void AddPlant()
@@ -86,11 +89,11 @@ namespace Bionica
 
             if (creature is Plant)
             {
-                Creatures["Plants"].Remove(creature);
+                Plants.Remove(creature);
             }
             else if (creature is Herbivore)
             {
-                Creatures["Herbivores"].Remove(creature);
+                Herbivores.Remove(creature);
                 SetCode((creature as Herbivore).PreviousLocation, creature.Size, 0);
             }
         }
@@ -99,7 +102,7 @@ namespace Bionica
         {
             for (int i = location.X; i < location.X + size; i++)
                 for (int j = location.Y; j < location.Y + size; j++)
-                    Sch[j, i] = code;
+                    Sch[i, j] = code;
         }
 
         private Point GetLocation(int creature_size)
@@ -151,18 +154,10 @@ namespace Bionica
         {
             foreach (List<Creature> list in Creatures.Values)
                 for (int i = 0; i < list.Count; i++)
-                {
-                    int qnt = list.Count;
-
-                    list[i].Move();
-                    list[i].Eats();
                     list[i].Next();
 
-                    if (list.Count < qnt)
-                        i--;
-                }
-
-            AddPlants();
+            double fertility = GetFertility();
+            AddPlants(fertility);
             Place();
         }
 
@@ -172,19 +167,24 @@ namespace Bionica
             int y = mob_creature.Location.Y;
             int size = mob_creature.Size;
 
-            for(int i = x; i < x + size; i++)
-                for(int j = y; j < y + size; j++)
-                {
-                    List<Creature> eaten = Plants.FindAll(plant => plant.Location == new Point(i, j));
+            List<Creature> eaten = new List<Creature>(); ;
 
-                    if (eaten.Count != 0)
-                    {
-                        mob_creature.Saturation += eaten.Count * 10;
-                        Plants.RemoveAll(plant => plant.Location == new Point(i, j));
-                    }
-                }
+            for (int i = x; i < x + size; i++)
+                for(int j = y; j < y + size; j++)
+                    if (Sch[i, j] == 1)
+                        eaten.AddRange(Plants.FindAll(plant => plant.Location.X == i && plant.Location.Y == j));
+
+            foreach (Plant eaten_plant in eaten)
+            { 
+                mob_creature.Saturation += 5;
+                RemoveCreature(eaten_plant);
+            }
         }
 
+        private void Breed(Point location)
+        {
+            AddHerbivore(location);
+        }
         private List<Point> GetFreeSpace(Creature creature)
         {
             List<Point> FreeSpace = new List<Point>();
@@ -228,17 +228,6 @@ namespace Bionica
             return result == 0;
         }
 
-        public int GetBlock(int location, int size)
-        {
-            int block = 0;
-
-            if (location == Size - size)
-                block = -1;
-            else if (location == size)
-                block = 1;
-
-            return block;
-        }
 
         public override string ToString()
         {
@@ -256,7 +245,7 @@ namespace Bionica
             for (int i = 0; i < Size; i++)
             {
                 for (int j = 0; j < Size; j++)
-                    result.Append(Sch[j, i] + ",");
+                    result.Append(Sch[i, j] + ",");
 
                 result.Append("\n");
             }

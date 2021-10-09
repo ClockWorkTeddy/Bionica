@@ -12,7 +12,7 @@ namespace Bionica
     {
         private BitmapSource image = new BitmapImage();
         private int epoche = 0;
-        private int saturation = 0;
+        private int herb_count = 0;
 
         Schema Schema = null;
         public int Size { get; set; } = 400;
@@ -36,13 +36,13 @@ namespace Bionica
             }
         }
 
-        public int Saturation
+        public int HerbCount
         {
-            get { return saturation; }
+            get { return herb_count; }
             set
             {
-                saturation = value;
-                OnPropertyChanged("Saturation");
+                herb_count = value;
+                OnPropertyChanged("HerbCount");
             }
         }
 
@@ -55,14 +55,17 @@ namespace Bionica
         public void ReDraw()
         {
             Bitmap Img = new Bitmap(Size, Size);
+            ImageWrapper img_wpar = new ImageWrapper(Img);
 
             for (int i = 0; i < Size; i++)
                 for (int j = 0; j < Size; j++)
-                    Img.SetPixel(j, i, GetColor(Schema.Sch[i,j]));
+                    img_wpar.SetPixel(new System.Drawing.Point(j, i), GetColor(Schema.Sch[i, j]).ToArgb());
+
+            img_wpar.Dispose();
 
             Update(Img);
             Epoche = Schema.Epoche;
-            Saturation = Schema.Herbivores.Count > 0 ? (Schema.Herbivores[0] as MobileCreature).Saturation : 0;
+            HerbCount = Schema.Herbivores.Count;
         }
 
         public Color GetColor(int code)
@@ -83,8 +86,11 @@ namespace Bionica
         }
         public void Next()
         {
-            Schema.Move();
-            ReDraw();
+            for (int i = 0; i < 1; i++)
+            {
+                Schema.Move();
+                ReDraw();
+            }
         }
 
         public void Update(Bitmap img)
