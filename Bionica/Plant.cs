@@ -7,11 +7,11 @@ namespace Bionica
 {
     class Plant : Creature
     {           
-        private static Point max_age_range = new Point(300, 600);
+        private static Point max_age_range = new Point(5000, 7500);
         public static int SizeDef { get; } = 1;
         public Plant(Point location) : base (location, max_age_range)
         {
-            Size = 1;
+            Size = SizeDef;
             Code = 1;
         }
     }

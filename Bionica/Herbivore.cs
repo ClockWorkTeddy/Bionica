@@ -12,10 +12,9 @@ namespace Bionica
         public static int SizeDef { get; } = 2;
         public Herbivore(Point location) : base (location, max_age_range, saturation)
         {
-            Size = 2;
+            Size = SizeDef;
             Code = 2;
             Speed = 1;
         }
-
     }
 }
