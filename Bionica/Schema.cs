@@ -10,7 +10,7 @@ namespace Bionica
         private int Square;
         public int[,] Sch = null;
         public int Epoche { get; set; }
-        public Dictionary<string, List<Creature>> Creatures {get; set;}
+        public Dictionary<string, List<Creature>> Creatures {get; set;} //Have to split it!
         public List<Creature> Plants { get; set; } = new List<Creature>();
         public List<Creature> Herbivores { get; set; } = new List<Creature>();
         public int Size { get; set; }
@@ -38,8 +38,7 @@ namespace Bionica
         {
             Clear();
             AddPlants();
-            AddHerbivore();
-            AddHerbivore();
+            AddHerbivore(GetLocation(Herbivore.SizeDef));
             Place();
         }
 
@@ -61,9 +60,9 @@ namespace Bionica
 
             return fertility;
         }
-        private void AddHerbivore()
+        private void AddHerbivore(Point location)
         {
-            Herbivore herb = new Herbivore(GetLocation(Herbivore.SizeDef));
+            Herbivore herb = new Herbivore(location);
             Herbivores.Add(herb);
             SetCode(herb.Location, herb.Size, herb.Code);
             herb.RemoveCreature += RemoveCreature;
@@ -161,7 +160,7 @@ namespace Bionica
                     if (list.Count < qnt)
                         i--;
                 }
-
+             
             AddPlants();
             Place();
         }
