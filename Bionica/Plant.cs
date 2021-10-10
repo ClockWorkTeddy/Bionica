@@ -14,5 +14,13 @@ namespace Bionica
             Size = SizeDef;
             Code = 1;
         }
+
+        public override int GetHashCode()
+        {
+            if (this.Location == null)
+                return base.GetHashCode();
+            else
+                return Location.X * 1000 + Location.Y;
+        }
     }
 }

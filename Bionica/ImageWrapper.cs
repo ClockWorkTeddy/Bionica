@@ -7,6 +7,8 @@ using System.Drawing.Imaging;
 
 namespace Bionica
 {
+    /// Designed by Storm23 from CyberForum.ru, url: https://www.cyberforum.ru/blogs/529033/blog3507.html
+    /// 
     /// <summary>
     /// Обертка над Bitmap для быстрого чтения и изменения пикселов.
     /// Также, класс контролирует выход за пределы изображения: при чтении за границей изображения - возвращает DefaultColor, при записи за границей изображения - игнорирует присвоение.

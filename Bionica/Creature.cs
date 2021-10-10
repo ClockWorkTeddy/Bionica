@@ -12,6 +12,7 @@ namespace Bionica
         public int Size { get; set; }
         public int Code { get; set; }
         public int Age { get; set; }
+        public int Hash { get; set; }
         public bool Alive { get; set; }
         public delegate void CreatureHandler(Creature creature);
         public event CreatureHandler RemoveCreature;
@@ -20,6 +21,8 @@ namespace Bionica
             Location = location;
             Age = 0;
             max_age = GetMaxAge(max_age_range);
+            Hash = Location.X * 1000 + Location.Y;
+
             Alive = true;
         }
 

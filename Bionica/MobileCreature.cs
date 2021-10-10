@@ -43,20 +43,14 @@ namespace Bionica
 
         public override void Next()
          {
-            int qnt = 1;
-            for (int i = 0; i < qnt; i++)
                 Move();
-            for (int i = 0; i < qnt; i++)
                 Eats();
-            for (int i = 0; i < qnt; i++)
                 Hungering();
-            for (int i = 0; i < qnt; i++)
                 Ageing();
 
             if (this.Saturation > 100)
             {
-                for (int i = 0; i < qnt; i++)
-                    Breeds();
+                Breeds();
                 this.Saturation -= 50;
             }
         }

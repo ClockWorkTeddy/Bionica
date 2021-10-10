@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
+using System.Linq;
 
 namespace Bionica
 {
     class Schema
     {
         private int Square;
+        private ILookup<Point, Creature> PlantsLookUp = null;
         public int[,] Sch = null;
         public int Epoche { get; set; }
         public Dictionary<string, List<Creature>> Creatures {get; set;}
@@ -40,8 +42,13 @@ namespace Bionica
 
             AddPlants(0.2);
 
-            Point location = GetLocation(Herbivore.SizeDef);
-            AddHerbivore(location);
+            int herb_qnt = 10;
+
+            for (int i = 0; i < herb_qnt; i++)
+            {
+                Point location = GetLocation(Herbivore.SizeDef);
+                AddHerbivore(location);
+            }
 
             Place();
         }
@@ -59,7 +66,7 @@ namespace Bionica
             Random rnd = new Random();
             int min_fert = 1;
             int max_fert = 6;
-            double fertility = rnd.Next(min_fert, max_fert) / (Size * 25.0);
+            double fertility = rnd.Next(min_fert, max_fert) / (Size * 10.0);
 
             return fertility;
         }
@@ -152,6 +159,8 @@ namespace Bionica
 
         public void Move()
         {
+            PlantsLookUp = Plants.ToLookup(x => x.Location);
+
             foreach (List<Creature> list in Creatures.Values)
                 for (int i = 0; i < list.Count; i++)
                     list[i].Next();
@@ -170,9 +179,17 @@ namespace Bionica
             List<Creature> eaten = new List<Creature>(); ;
 
             for (int i = x; i < x + size; i++)
-                for(int j = y; j < y + size; j++)
+                for (int j = y; j < y + size; j++)
                     if (Sch[i, j] == 1)
-                        eaten.AddRange(Plants.FindAll(plant => plant.Location.X == i && plant.Location.Y == j));
+                        eaten.AddRange(PlantsLookUp[new Point(i, j)]); //Location 527 - 121
+                        //eaten.AddRange(PlantsLookUp[i * 1000 + j]); //Hash 527 - 124
+                        //eaten.AddRange(PlantsLookUp[i * 1000 + j]); //GetHash() 531 - 143
+                        //eaten.AddRange(Plants.Where(plant => plant.Hash == (i * 1000 + j))); //539 - 693
+                        //eaten.AddRange(Plants.Where(plant => plant.Location.X == i && plant.Location.Y == j)); //531 - 500
+                        //eaten.AddRange(Plants.FindAll(plant => plant.Location.X == i && plant.Location.Y == j)); //531 - 530
+                        //eaten.AddRange(Plants.FindAll(plant => plant.Hash == (i * 1000 + j))); //530 - 578
+                        //eaten.AddRange(Plants.Where(plant => plant.Location == new Point(i, j)));
+
 
             foreach (Plant eaten_plant in eaten)
             { 

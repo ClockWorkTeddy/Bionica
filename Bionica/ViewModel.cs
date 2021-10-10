@@ -13,6 +13,7 @@ namespace Bionica
         private BitmapSource image = new BitmapImage();
         private int epoche = 0;
         private int herb_count = 0;
+        private int plant_count = 0;
 
         Schema Schema = null;
         public int Size { get; set; } = 400;
@@ -46,6 +47,17 @@ namespace Bionica
             }
         }
 
+        public int PlantCount
+        {
+            get { return plant_count; }
+            set
+            {
+                plant_count = value;
+                OnPropertyChanged("PlantCount");
+            }
+        }
+
+
         public ViewModel()
         {
             Schema = new Schema(Size);
@@ -66,6 +78,7 @@ namespace Bionica
             Update(Img);
             Epoche = Schema.Epoche;
             HerbCount = Schema.Herbivores.Count;
+            PlantCount = Schema.Plants.Count;
         }
 
         public Color GetColor(int code)
