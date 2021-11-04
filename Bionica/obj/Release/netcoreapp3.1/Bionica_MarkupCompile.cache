@@ -4,11 +4,11 @@
 winexe
 C#
 .cs
-C:\Users\vanka\source\repos\ClockWorkTeddy\Bionica\Bionica\obj\Debug\netcoreapp3.1\
+C:\Users\vanka\source\repos\ClockWorkTeddy\Bionica\Bionica\obj\Release\netcoreapp3.1\
 Bionica
 none
 false
-TRACE;DEBUG;NETCOREAPP;NETCOREAPP3_1;
+TRACE;RELEASE;NETCOREAPP;NETCOREAPP3_1;
 C:\Users\vanka\source\repos\ClockWorkTeddy\Bionica\Bionica\App.xaml
 11407045341
 
