@@ -37,6 +37,10 @@ namespace Bionica
             DC.Start();
         }
 
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            DC.Revert();
+        }
         private void Button_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.G)

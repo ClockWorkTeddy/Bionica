@@ -36,6 +36,13 @@ namespace Bionica
 
             Epoche = -1;
         }
+
+        public void Revert()
+        {
+            Clear();
+            Place();
+        }
+
         public void Start()
         {
             Clear();
@@ -100,9 +107,16 @@ namespace Bionica
             }
             else if (creature is Herbivore)
             {
+                Herbivore herb = creature as Herbivore;
                 Herbivores.Remove(creature);
                 SetCode((creature as Herbivore).PreviousLocation, creature.Size, 0);
+                herb.GetFreePoints -= GetFreeSpace;
+                herb.Starving -= RemoveCreature;
+                herb.Eat -= Eating;
+                herb.Breeding -= Breed;
             }
+
+            creature.RemoveCreature -= RemoveCreature;
         }
 
         private void SetCode(Point location, int size, int code)
@@ -182,14 +196,6 @@ namespace Bionica
                 for (int j = y; j < y + size; j++)
                     if (Sch[i, j] == 1)
                         eaten.AddRange(PlantsLookUp[new Point(i, j)]); //Location 527 - 121
-                        //eaten.AddRange(PlantsLookUp[i * 1000 + j]); //Hash 527 - 124
-                        //eaten.AddRange(PlantsLookUp[i * 1000 + j]); //GetHash() 531 - 143
-                        //eaten.AddRange(Plants.Where(plant => plant.Hash == (i * 1000 + j))); //539 - 693
-                        //eaten.AddRange(Plants.Where(plant => plant.Location.X == i && plant.Location.Y == j)); //531 - 500
-                        //eaten.AddRange(Plants.FindAll(plant => plant.Location.X == i && plant.Location.Y == j)); //531 - 530
-                        //eaten.AddRange(Plants.FindAll(plant => plant.Hash == (i * 1000 + j))); //530 - 578
-                        //eaten.AddRange(Plants.Where(plant => plant.Location == new Point(i, j)));
-
 
             foreach (Plant eaten_plant in eaten)
             { 

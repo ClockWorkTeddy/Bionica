@@ -10,6 +10,9 @@ namespace Bionica
 {
     class ViewModel : INotifyPropertyChanged
     {
+        [System.Runtime.InteropServices.DllImport("gdi32.dll")]
+        public static extern bool DeleteObject(IntPtr hObject);
+
         private BitmapSource image = new BitmapImage();
         private int epoche = 0;
         private int herb_count = 0;
@@ -76,6 +79,7 @@ namespace Bionica
             img_wpar.Dispose();
 
             Update(Img);
+
             Epoche = Schema.Epoche;
             HerbCount = Schema.Herbivores.Count;
             PlantCount = Schema.Plants.Count;
@@ -106,9 +110,24 @@ namespace Bionica
             }
         }
 
+        public void Revert()
+        {
+            Schema.Revert();
+            ReDraw();
+        }
+
         public void Update(Bitmap img)
         {
-            Image = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(img.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+            IntPtr img_ptr = img.GetHbitmap();
+
+            try
+            {
+                Image = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(img_ptr, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+            }
+            finally
+            {
+                DeleteObject(img_ptr);
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
