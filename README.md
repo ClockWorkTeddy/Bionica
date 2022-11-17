@@ -1,4 +1,6 @@
 # Bionica
+(After "Start" just press and hold 'n' on your keyboard)
+
 Bionic Sandbox
 
 This application is sand box with bmp image, represents some area. There is a time-step with counter. In the area can be placed two types of creatures: plants and herbivores. 
