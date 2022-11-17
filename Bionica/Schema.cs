@@ -11,7 +11,7 @@ namespace Bionica
         private int Square;
         private ILookup<Point, Creature> PlantsLookUp = null;
         public int[,] Sch = null;
-        public int Epoche { get; set; }
+        public static int Epoche { get; set; }
         public Dictionary<string, List<Creature>> Creatures {get; set;}
         public List<Creature> Plants { get; set; } = new List<Creature>();
         public List<Creature> Herbivores { get; set; } = new List<Creature>();
@@ -49,12 +49,12 @@ namespace Bionica
 
             AddPlants(0.2);
 
-            int herb_qnt = 10;
+            int herb_qnt = 900;
 
             for (int i = 0; i < herb_qnt; i++)
             {
                 Point location = GetLocation(Herbivore.SizeDef);
-                AddHerbivore(location);
+                AddHerbivore(location, (i % 3) + 2);
             }
 
             Place();
@@ -77,9 +77,10 @@ namespace Bionica
 
             return fertility;
         }
-        private void AddHerbivore(Point location)
+        private void AddHerbivore(Point location, int code)
         {
-            Herbivore herb = new Herbivore(location);
+
+            Herbivore herb = new Herbivore(location, code);
             Herbivores.Add(herb);
             SetCode(herb.Location, herb.Size, herb.Code);
             herb.RemoveCreature += RemoveCreature;
@@ -204,9 +205,9 @@ namespace Bionica
             }
         }
 
-        private void Breed(Point location)
+        private void Breed(Point location, int code)
         {
-            AddHerbivore(location);
+            AddHerbivore(location, code);
         }
         private List<Point> GetFreeSpace(Creature creature)
         {

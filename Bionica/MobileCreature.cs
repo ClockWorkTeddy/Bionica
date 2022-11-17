@@ -16,7 +16,7 @@ namespace Bionica
         public event Mover GetFreePoints;
         public delegate void Hunger(Creature creature);
         public event Hunger Starving;
-        public delegate void Breed(Point location);
+        public delegate void Breed(Point location, int code);
         public event Breed Breeding;
 
         public MobileCreature(Point location, Point max_age_range, int saturation) : base (location, max_age_range)
@@ -70,7 +70,7 @@ namespace Bionica
 
         public void Breeds()
         {
-            Breeding?.Invoke(this.PreviousLocation);
+            Breeding?.Invoke(this.PreviousLocation, this.Code);
         }
     }
 }

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "AfzyzOZalCt1gN2LoSwghiOApzSFv0v4BvcVh0dlXwNaVZ5DxgUnxycr/IhIms/p5X1MFovYYnzEN3mD9/vHQw==",
+  "dgSpecHash": "QnN8KGcvWrdGT5Z+/CdN2nLf2zr6Ysz71ur+2uLPWcwDMAXjiqRrAebbUumT8VWORXScPzQ03F5lOr++K617Mw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\vanka\\Source\\Repos\\ClockWorkTeddy\\Bionica\\Bionica\\Bionica.csproj",
+  "projectFilePath": "C:\\Users\\vanka\\source\\repos\\ClockWorkTeddy\\Bionica\\Bionica\\Bionica.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\vanka\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
     "C:\\Users\\vanka\\.nuget\\packages\\microsoft.win32.systemevents\\5.0.0\\microsoft.win32.systemevents.5.0.0.nupkg.sha512",
